@@ -1,7 +1,10 @@
 body {
   margin: 0;
-  font-family: "Inter", system-ui;
   background-color: #e7f6ff;
+}
+
+* {
+  font-family: "Inter", system-ui;
 }
 
 .wrapper {
@@ -10,6 +13,127 @@ body {
   border-radius: 20px;
   max-width: 1080px;
   margin: 50px auto;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 420px;
+  height: 100%;
+  right: 0;
+  background: #fff;
+  box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.01);
+  padding: 30px;
+
+  .items {
+    flex: 1;
+    overflow: auto;
+    margin-bottom: 40px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+}
+
+.cartItem {
+  border: 1px solid #f3f3f3;
+  border-radius: 20px;
+  padding: 20px;
+  overflow: hidden;
+  padding: 20px;
+
+  .cartItemImg {
+    width: 70px;
+    height: 70px;
+    background-size: contain;
+    background-position: 0 10px;
+    background-repeat: no-repeat;
+    margin-right: 20px;
+  }
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  b {
+    font-size: 14px;
+  }
+
+  .removebtn {
+    opacity: 0.5;
+    transition: opacity 0.15s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+}
+
+.cartTotalBlock {
+  li {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 20px;
+
+    div {
+      flex: 1;
+      height: 1px;
+      border-bottom: 1px dashed #dfdfdf;
+      position: relative;
+      top: -3px;
+      margin: 0 7px;
+    }
+  }
+
+  .greenBtn {
+    position: relative;
+
+    &:hover {
+      .btnIcon {
+        transform: translateX(-5px);
+      }
+    }
+
+    .btnIcon {
+      position: absolute;
+      top: 20px;
+      left: 310px;
+      transition: transform 0.2s ease-in-out;
+    }
+  }
+}
+
+.greenBtn {
+  width: 100%;
+  height: 55px;
+  background-color: #9dd558;
+  border-radius: 18px;
+  border: 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background: lighten($color: #9dd558, $amount: 5%);
+  }
+  &:active {
+    background: darken($color: #9dd558, $amount: 5%);
+  }
 }
 
 header {
@@ -40,6 +164,15 @@ header {
   width: 220px;
   border-radius: 40px;
   margin-right: 30px;
+  transition:
+    box-shadow 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.05);
+    transform: translateY(-5px);
+  }
+
   span {
     font-size: 13px;
     opacity: 0.5;
@@ -53,6 +186,14 @@ header {
     font-size: 14px;
     font-weight: 400;
   }
+
+  .like {
+    position: absolute;
+    cursor: pointer;
+    border: 1px solid #f8f8f8;
+    border-radius: 10px;
+    padding: 10px;
+  }
 }
 
 .button {
@@ -63,4 +204,17 @@ header {
   height: 32px;
   width: 32px;
   cursor: pointer;
+}
+
+.search-block {
+  border: 1px solid #f3f3f3;
+  border-radius: 10px;
+  padding: 0 15px;
+
+  input {
+    border: none;
+    padding: 13px;
+    font-size: 16px;
+    width: 200px;
+  }
 }
