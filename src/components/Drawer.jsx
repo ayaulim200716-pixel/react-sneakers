@@ -1,6 +1,6 @@
 import CancelIcon from "../assets/icons/cancel-icon.svg?react";
 import ArrowlIcon from "../assets/icons/arrow-icon.svg?react";
-export default function Drawer({ onClose, items = [] }) {
+export default function Drawer({ onRemove, onClose, items = [] }) {
   return (
     <>
       <div className="overlay">
@@ -23,7 +23,7 @@ export default function Drawer({ onClose, items = [] }) {
                   <b>{obj.price}</b>
                 </div>
                 <button className=" button removebtn">
-                  <CancelIcon />
+                  <CancelIcon onClick={() => onRemove(obj.id)} />
                 </button>
               </div>
             ))}
