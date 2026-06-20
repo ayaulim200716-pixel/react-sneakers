@@ -1,12 +1,17 @@
 import PlusIcon from "../../assets/icons/plus-icon.svg?react";
 import LikeIcon from "../../assets/icons/like-icon.svg?react";
+import AddedIcon from "../../assets/icons/added-icon.svg?react";
 import styles from "./Card.module.scss";
+import { useState } from "react";
 
-export default function Card(props) {
-  const { name, img, price } = props;
-  const onClickButton = () => {
-    alert(name);
+export default function Card({ img, name, price, onPlus }) {
+  const [isAdded, setIsAdded] = useState(true);
+
+  const onClickPlus = () => {
+    onPlus({ img, name, price });
+    setIsAdded(!isAdded);
   };
+
   return (
     <>
       <div className={styles.card}>
@@ -20,8 +25,8 @@ export default function Card(props) {
             <span>Цена:</span>
             <b>{price}</b>
           </div>
-          <button className="button" onClick={onClickButton}>
-            <PlusIcon />
+          <button className={styles.button} onClick={onClickPlus}>
+            {isAdded ? <PlusIcon /> : <AddedIcon className={styles.added} />}
           </button>
         </div>
       </div>
