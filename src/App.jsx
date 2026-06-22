@@ -1,14 +1,15 @@
-import SearchIcon from "./assets/icons/search-icon.svg?react";
-import CancelIcon from "./assets/icons/cancel-icon.svg?react";
-import Card from "./components/Card/Card";
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
+import Home from "./pages/Home";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Route, Routes } from "react-router-dom";
+import Favorites from "./pages/Favorites";
 
 function App() {
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [cartOpened, setCartOpened] = useState(false);
 
@@ -35,6 +36,7 @@ function App() {
   };
 
   const onRemoveItem = (id) => {
+    axios.delete(`https://6a3637d3766b831960f90683.mockapi.io/cart/${id}`);
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
@@ -49,44 +51,21 @@ function App() {
           />
         ) : null}
         <Header onClickCart={() => setCartOpened(true)} />
-
-        <div className="content p-40">
-          <div className="d-flex align-center justify-between mb-40">
-            <h1>
-              {searchValue
-                ? `Пойск по запросу: "${searchValue}"`
-                : "Все кроссовки"}
-            </h1>
-            <div className="search-block">
-              <SearchIcon />
-              {searchValue && (
-                <CancelIcon
-                  className="clear"
-                  onClick={() => setSearchValue(" ")}
-                />
-              )}
-              <input
-                placeholder="Поиск..."
-                onChange={onChangeSearchInput}
-                value={searchValue}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                items={items}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                onChangeSearchInput={onChangeSearchInput}
+                onAddedToCart={onAddedToCart}
               />
-            </div>
-          </div>
-
-          <div className="d-flex flex-wrap">
-            {items
-              .filter((item) =>
-                item.name.toLowerCase().includes(searchValue.toLowerCase()),
-              )
-              .map((item) => (
-                <Card
-                  key={item.id}
-                  {...item}
-                  onPlus={(obj) => onAddedToCart(obj)}
-                />
-              ))}
-          </div>
-        </div>
+            }
+          />
+          <Route path="/favorites" element={<Favorites items={favorites} />} />
+        </Routes>
       </div>
     </>
   );
