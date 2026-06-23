@@ -1,10 +1,11 @@
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 import Home from "./pages/Home";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { createContext, useEffect, useState } from "react";
+import axios, { create } from "axios";
 import { Route, Routes } from "react-router-dom";
 import Favorites from "./pages/Favorites";
+import AppContext from "./context";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -12,23 +13,36 @@ function App() {
   const [favorites, setFavorites] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [cartOpened, setCartOpened] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("https://6a3637d3766b831960f90683.mockapi.io/items")
-      .then((res) => {
-        setItems(res.data);
-      });
-    axios
-      .get("https://6a3637d3766b831960f90683.mockapi.io/cart")
-      .then((res) => {
-        setCartItems(res.data);
-      });
+    async function fetchData() {
+      const cartResponse = await axios.get(
+        "https://6a3637d3766b831960f90683.mockapi.io/items",
+      );
+      const itemsResponse = await axios.get(
+        "https://6a3637d3766b831960f90683.mockapi.io/cart",
+      );
+
+      setIsLoading(false);
+
+      setItems(itemsResponse.data);
+      setItems(cartResponse.data);
+    }
+
+    fetchData();
   }, []);
 
   const onAddedToCart = (obj) => {
-    axios.post("https://6a3637d3766b831960f90683.mockapi.io/cart", obj);
-    setCartItems((prev) => [...prev, obj]);
+    console.log(obj);
+    if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+      setCartItems((prev) =>
+        prev.filter((item) => Number(item.id) !== Number(obj.id)),
+      );
+    } else {
+      axios.post("https://6a3637d3766b831960f90683.mockapi.io/cart", obj);
+      setCartItems((prev) => [...prev, obj]);
+    }
   };
 
   const onChangeSearchInput = (event) => {
@@ -40,8 +54,19 @@ function App() {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const isItemAdd = (id) => {
+    return cartItems.some((obj) => Number(obj.id) === Number(id));
+  };
+
   return (
-    <>
+    <AppContext.Provider
+      value={{
+        items,
+        cartItems,
+        favorites,
+        isItemAdd,
+      }}
+    >
       <div className="wrapper clear">
         {cartOpened ? (
           <Drawer
@@ -56,7 +81,9 @@ function App() {
             path="/"
             element={
               <Home
+                isLoading={isLoading}
                 items={items}
+                cartItems={cartItems}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
                 onChangeSearchInput={onChangeSearchInput}
@@ -67,7 +94,7 @@ function App() {
           <Route path="/favorites" element={<Favorites items={favorites} />} />
         </Routes>
       </div>
-    </>
+    </AppContext.Provider>
   );
 }
 
