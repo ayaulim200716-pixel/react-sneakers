@@ -1,20 +1,15 @@
 import SearchIcon from "../assets/icons/search-icon.svg?react";
 import CancelIcon from "../assets/icons/cancel-icon.svg?react";
 import Card from "../components/Card/Card";
-import AppContext from "../context";
-import React from "react";
 
 export default function Home({
   items,
-  cartItems,
   searchValue,
   setSearchValue,
   onChangeSearchInput,
   onAddedToCart,
   isLoading,
 }) {
-  const { isItemAdd } = React.useContext(AppContext);
-
   const renderItems = () => {
     const filteredItems = items.filter((item) =>
       item.name.toLowerCase().includes(searchValue.toLowerCase()),
@@ -25,7 +20,6 @@ export default function Home({
         key={index}
         {...item}
         onPlus={(obj) => onAddedToCart(obj)}
-        added={isItemAdd(item && item.id)}
         loading={isLoading}
       />
     ));

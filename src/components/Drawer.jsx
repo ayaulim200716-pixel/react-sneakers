@@ -1,6 +1,18 @@
-import CancelIcon from "../assets/icons/cancel-icon.svg?react";
+import { useState, useContext } from "react";
 import ArrowlIcon from "../assets/icons/arrow-icon.svg?react";
+import CancelIcon from "../assets/icons/cancel-icon.svg?react";
+import AppContext from "../context";
+
+import Info from "./Info";
 export default function Drawer({ onRemove, onClose, items = [] }) {
+  const [isOrderComplete, setIsOrderComplete] = useState();
+  const { setCartItems } = useContext(AppContext);
+
+  const onClickOrder = () => {
+    setIsOrderComplete(true);
+    setCartItems([]);
+  };
+
   return (
     <>
       <div className="overlay">
@@ -46,28 +58,26 @@ export default function Drawer({ onRemove, onClose, items = [] }) {
                     <b>1074 руб. </b>
                   </li>
                 </ul>
-                <button className="greenBtn">
+                <button className="greenBtn" onClick={onClickOrder}>
                   <ArrowlIcon className="btnIcon" />
                   Оформить заказ
                 </button>
               </div>
             </>
           ) : (
-            <div className="cartEmpty d-flex align-center justify-center flex flex-column">
-              <img
-                src="/src/assets/images/emptybox-img.png"
-                alt="emptycart"
-                className="mb-20"
-              />
-              <h2>Корзина пустая</h2>
-              <p className="">
-                Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.
-              </p>
-              <button className="greenBtn" onClick={onClose}>
-                <ArrowlIcon className="btnIcon2" />
-                Вернуться назад
-              </button>
-            </div>
+            <Info
+              title={isOrderComplete ? "Заказ оформлен!" : "Корзина пустая"}
+              desc={
+                isOrderComplete
+                  ? "Ваш заказ #18 скоро будет передан курьерской доставке"
+                  : "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+              }
+              img={
+                isOrderComplete
+                  ? "/src/assets/icons/order-icon.svg"
+                  : "/src/assets/images/emptybox-img.png"
+              }
+            />
           )}
         </div>
       </div>

@@ -5,6 +5,8 @@ import AddedIcon from "../../assets/icons/added-icon.svg?react";
 import styles from "./Card.module.scss";
 import { useState } from "react";
 import ContentLoader from "react-content-loader";
+import AppContext from "../../context";
+import React from "react";
 
 export default function Card({
   id,
@@ -16,12 +18,11 @@ export default function Card({
   added = false,
   loading = false,
 }) {
-  const [isAdded, setIsAdded] = useState(added);
+  const { isItemAdd } = React.useContext(AppContext);
   const [isFavorite, setIsFavorite] = useState(favorited);
 
   const onClickPlus = () => {
     onPlus({ id, img, name, price });
-    setIsAdded(!isAdded);
   };
 
   const onClickLike = () => {
@@ -59,7 +60,7 @@ export default function Card({
                 <b>{price}</b>
               </div>
               <button className={styles.button} onClick={onClickPlus}>
-                {isAdded ? (
+                {isItemAdd(id) ? (
                   <AddedIcon className={styles.added} />
                 ) : (
                   <PlusIcon />
