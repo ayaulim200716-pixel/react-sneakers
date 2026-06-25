@@ -57,7 +57,7 @@ export default function Card({
             <div className="cardBottom d-flex justify-between align-center">
               <div className="d-flex flex-column ">
                 <span>Цена:</span>
-                <b>{price}</b>
+                <b>{price} тг</b>
               </div>
               <button className={styles.button} onClick={onClickPlus}>
                 {isItemAdd(id) ? (

@@ -1,12 +1,14 @@
 import { useState, useContext } from "react";
-import ArrowlIcon from "../assets/icons/arrow-icon.svg?react";
-import CancelIcon from "../assets/icons/cancel-icon.svg?react";
-import AppContext from "../context";
+import ArrowlIcon from "../../assets/icons/arrow-icon.svg?react";
+import CancelIcon from "../../assets/icons/cancel-icon.svg?react";
+import AppContext from "../../context";
+import { useCart } from "../hooks/useCart";
+import styles from "./Drawer.module.scss";
 
-import Info from "./Info";
-export default function Drawer({ onRemove, onClose, items = [] }) {
+import Info from "../Info";
+export default function Drawer({ onRemove, onClose, items = [], opened }) {
+  const { cartItems, setCartItems, totalPrice } = useCart();
   const [isOrderComplete, setIsOrderComplete] = useState();
-  const { setCartItems } = useContext(AppContext);
 
   const onClickOrder = () => {
     setIsOrderComplete(true);
@@ -15,8 +17,10 @@ export default function Drawer({ onRemove, onClose, items = [] }) {
 
   return (
     <>
-      <div className="overlay">
-        <div className="drawer">
+      <div
+        className={`${styles.overlay} ${opened ? styles.overlayVisible : " "}`}
+      >
+        <div className={styles.drawer}>
           <h2 className="mb-30 d-flex justify-between  align-center">
             Корзина <CancelIcon className="removebtn cu-p" onClick={onClose} />
           </h2>
@@ -50,12 +54,12 @@ export default function Drawer({ onRemove, onClose, items = [] }) {
                   <li>
                     <span>Итого: </span>
                     <div></div>
-                    <b>21 498 руб. </b>
+                    <b>{totalPrice} руб. </b>
                   </li>
                   <li>
                     <span>Налог 5%: </span>
                     <div></div>
-                    <b>1074 руб. </b>
+                    <b>{(totalPrice / 100) * 5} руб. </b>
                   </li>
                 </ul>
                 <button className="greenBtn" onClick={onClickOrder}>

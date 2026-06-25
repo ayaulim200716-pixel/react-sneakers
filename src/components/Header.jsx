@@ -3,8 +3,11 @@ import CartIcon from "../assets/icons/cart-icon.svg?react";
 import LikeIcon from "../assets/icons/like-icon.svg?react";
 import ProfileIcon from "../assets/icons/profile-icon.svg?react";
 import { Link } from "react-router-dom";
+import { useCart } from "./hooks/useCart";
 
 export default function Header(props) {
+  const { totalPrice } = useCart();
+
   return (
     <>
       <header className="d-flex justify-between align-center p-40">
@@ -18,7 +21,7 @@ export default function Header(props) {
         <ul className="d-flex">
           <li className="mr-30 " onClick={props.onClickCart}>
             <CartIcon className="mr-10 " />
-            <span>1205 руб.</span>
+            <span>{totalPrice} руб</span>
           </li>
           <li className="mr-30">
             <Link to={"/favorites"}>
@@ -26,10 +29,10 @@ export default function Header(props) {
             </Link>
             <span>Закладки</span>
           </li>
-          <li className="mr-30">
+          <Link to={"/orders"} className="mr-30">
             <ProfileIcon className="mr-10" />
             <span>Профиль</span>
-          </li>
+          </Link>
         </ul>
       </header>
     </>

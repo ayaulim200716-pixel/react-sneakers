@@ -1,11 +1,12 @@
 import Header from "./components/Header";
-import Drawer from "./components/Drawer";
+import Drawer from "./components/Drawer/Drawer";
 import Home from "./pages/Home";
 import { createContext, useEffect, useState } from "react";
 import axios, { create } from "axios";
 import { Route, Routes } from "react-router-dom";
 import Favorites from "./pages/Favorites";
 import AppContext from "./context";
+import Orders from "./pages/Orders";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -67,16 +68,18 @@ function App() {
         isItemAdd,
         setCartOpened,
         setCartItems,
+        onAddedToCart,
       }}
     >
       <div className="wrapper clear">
-        {cartOpened ? (
+        <div>
           <Drawer
             items={cartItems}
             onClose={() => setCartOpened(false)}
             onRemove={onRemoveItem}
+            opened={cartOpened}
           />
-        ) : null}
+        </div>
         <Header onClickCart={() => setCartOpened(true)} />
         <Routes>
           <Route
@@ -94,6 +97,7 @@ function App() {
             }
           />
           <Route path="/favorites" element={<Favorites items={favorites} />} />
+          <Route path="/orders" element={<Orders items={Orders} />} />
         </Routes>
       </div>
     </AppContext.Provider>
